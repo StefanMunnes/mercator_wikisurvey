@@ -15,28 +15,28 @@ questions_short <- c(
   "am Arbeitsplatz" = "work"
 )
 
+items <- lapply(unname(questions_short), function(q) {
+  readxl::read_xlsx("items.xlsx", sheet = q)
+})
+
+names(items) <- unname(questions_short)
+
 
 server <- function(input, output, session) {
 
-  # load and prepare wiki items as pairs from excel file
-  items <- readxl::read_xlsx("items.xlsx")
+  # load and prepare wiki items as pairs from loaded excel file
+  pairs <- lapply(items, function(q) {
 
-  pairs <- lapply(unique(items$question), function(q) {
-
-    items <- items[items$question == q, ]
-    items_raw <- setNames(as.character(items$item), items$label)
+    items_raw <- setNames(as.character(q$item), q$label)
 
     pairs <- replicate(
       10, 
-      sample(items_raw, 2, replace = FALSE, prob = items$prob),
+      sample(items_raw, 2, replace = FALSE, prob = q$prob),
       simplify = FALSE
     )
 
     return(pairs)
   })
-
-  names(pairs) <- unique(items$question)
-
 
   # store all randomly assigned pairs in variable for each subgroup of question
   for (pairs_name in names(pairs)) {
