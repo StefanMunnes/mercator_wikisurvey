@@ -1,0 +1,10 @@
+/.env
+/get_db_data.R
+/get_items_matrix.R
+/get_new_items.R
+/items.xlsx
+/items_2025-02-11.xlsx
+/items_2025-02-12.xlsx
+/preview_data.csv
+/responses_items.xlsx
+/_survey

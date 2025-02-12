@@ -1,0 +1,221 @@
+---
+format: html
+echo: false
+warning: false
+---
+
+```{r}
+library(surveydown)
+```
+
+::: {#welcome .sd-page}
+
+### Willkommen zur Umfrage:<br />
+## Stärkung des gesellschaftlichen Zusammenhalts!
+Vielen Dank, dass Sie sich 5 Minuten Zeit nehmen! Ihr Beitrag hilft dabei, Maßnahmen zu finden, die den gesellschaftlichen Zusammenhalt stärken – ob in Deutschland, Ihrer Region oder am Arbeitsplatz. Ihre Perspektive zählt!
+
+### Worum geht es?
+Gesellschaftlicher Zusammenhalt ist die Grundlage für ein friedliches und funktionierendes Miteinander. Doch welche Maßnahmen fördern ihn am besten? Unser Ziel ist es, verschiedene Ideen zu sammeln und herauszufinden, welche davon als wirkungsvoll angesehen werden.
+
+### So funktioniert's:
+Dies ist eine interaktive Umfrage. Sie sehen immer zwei zufällig ausgewählte Maßnahmen. Entscheiden Sie, welche Sie für geeigneter halten, um den Zusammenhalt zu fördern.
+
+Haben Sie eigene Vorschläge für Maßnahmen? Tragen Sie diese gerne in den entsprechenden Feldern ein. Ihre Vorschläge können dann von anderen Befragten ebenfalls bewertet werden.
+
+Es gibt kein "richtig" oder "falsch" – wir möchten Ihre Meinung hören.
+
+<details>
+  <summary><strong>Informationen zum Datenschutz</strong></summary>
+  Verantwortlich für die Durchführung dieser Umfrage ist das <a href="https://www.wzb.eu/de">Wissenschaftszentrum Berlin für Sozialforschung (WZB)</a>. Die Datenerhebung und -verarbeitung erfolgt ausschließlich zu wissenschaftlichen Zwecken. Die Teilnahme an der Befragung ist freiwillig. Bei Nicht-Teilnahme entstehen Ihnen keinerlei Nachteile. Die erhobenen Daten sind annonym und lassen keine Rückschlüsse auf Sie als Person zu.
+
+  Mit Ihrer Teilnahme an der Befragung, stimmen Sie der durch uns durchgeführten Datenverarbeitung zu. Die Einwilligung kann jederzeit mit Wirkung für die Zukunft widerrufen werden. Die Einwilligung durch Teilnahme stellt zugleich die Rechtsgrundlage der Datenverarbeitung dar.
+
+  Für weitere Informationen zur Verarbeitung Ihrer Daten und zum Datenschutz, insbesondere zu Ihrem Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Widerspruch, Datenübertragbarkeit und Beschwerde bei einer Aufsichtsbehörde, informieren Sie sich auf unserer <a href="https://www.wzb.eu/de/datenschutz/datenschutzinformationen-fuer-teilnehmerinnen-der-wzb-forschung">Webseite</a> oder wenden Sie sich an den Datenschutzbeauftragten des WZB unter: <a href="mailto:datenschutz@wzb.eu">datenschutz\@wzb.eu</a>.
+</details>
+
+---
+
+**Wählen Sie, für welchen Bereich Sie Maßnahmen bewerten wollen und klicken Sie auf „Weiter“, um zu starten.**
+
+```{r}
+sd_question(
+  id = "question",
+  type = "mc",
+  label = "Für den ...",
+  option = c(
+    "... gesellschaftlichen Zusammenhalt in Deutschland." = "society",
+    "... gesellschaftlichen Zusammenhalt in Ihrer Region." = "region",
+    "... Zusammenhalt am Arbeitsplatz." = "work"
+  )
+)
+
+sd_next()
+```
+
+:::
+
+
+::: {#wiki .sd-page}
+
+### Ihrer Meinung nach, durch welche der beiden Maßnahmen kann der Zusammenhalt `r sd_output("question_lab_1", type = "value")` eher gefördert werden?
+**Bewerten Sie bis zu 10 Maßnahmenpaare, die von anderen Teilnehmenden vorgeschlagen wurden.**
+
+```{r}
+sd_output("wiki_1", "question")
+sd_output("wiki_2", "question")
+sd_output("wiki_3", "question")
+sd_output("wiki_4", "question")
+sd_output("wiki_5", "question")
+sd_output("wiki_6", "question")
+sd_output("wiki_7", "question")
+sd_output("wiki_8", "question")
+sd_output("wiki_9", "question")
+sd_output("wiki_10", "question")
+```
+
+---
+
+### Haben Sie weitere Ideen für Maßnahmen, durch die der Zusammenhalt `r sd_output("question_lab_2", type = "value")` gefördert werden kann?
+**Tragen Sie bis zu 10 weitere Maßnahmen ein, die andere Teilnehmende dann ebenfalls bewerten können.**
+
+```{r}
+sd_question(
+  id = "input1", type = "text", label = NULL,
+  option = "Ihre Idee für eine weitere Maßnahme ..."
+)
+sd_question(id = "input2", type = "text", label = NULL)
+sd_question(id = "input3", type = "text", label = NULL)
+sd_question(id = "input4", type = "text", label = NULL)
+sd_question(id = "input5", type = "text", label = NULL)
+sd_question(id = "input6", type = "text", label = NULL)
+sd_question(id = "input7", type = "text", label = NULL)
+sd_question(id = "input8", type = "text", label = NULL)
+sd_question(id = "input9", type = "text", label = NULL)
+sd_question(id = "input10", type = "text", label = NULL)
+
+sd_next()
+```
+
+:::
+
+
+::: {#sozdem .sd-page}
+
+**Abschließend möchten wir Sie noch bitten, einige Fragen zu Ihrer Person zu beantworten.**
+
+```{r}
+sd_question(
+  id = "byear",
+  type = "numeric",
+  label = "In welchem Jahr sind Sie geboren?"
+)
+
+sd_question(
+  id = "gender",
+  type = "mc",
+  label = "Was ist Ihr Geschlecht?",
+  option = c(
+    "männlich" = "1",
+    "weiblich" = "2",
+    "divers" = "3"
+  )
+)
+
+sd_question(
+  id = "plz",
+  type = "numeric",
+  label = "In welchem PLZ-Gebiet wohnen Sie?"
+)
+
+sd_question(
+  id = "migration",
+  type = "mc",
+  label = "Sind Sie oder Ihre Eltern nach Deutschland eingewandert?",
+  option = c(
+    "Ja, ich" = "1",
+    "Ja, meine Eltern" = "2",
+    "Nein" = "3"
+  )
+)
+
+sd_question(
+  id = "job",
+  type = "mc",
+  label = "Was ist Ihr höchster beruflicher Abschluss?",
+  option = c(
+    "Ich habe (noch) keinen beruflichen Abschluss" = "1",
+    "Abgeschlossene Lehre/Berufsausbildung" = "2",
+    "Fachschulabschluss (inkl. Meister:in u. Techniker:in)" = "3",
+    "Hochschulabschluss (z.B. Diplom, Magister, Bachelor, Master)" = "4",
+    "Sonstiges" = "sonstiges"
+  )
+)
+
+sd_question(
+  id = "job_sonstiges",
+  type = "text",
+  label = 'Was ist Ihr höchster beruflicher Abschluss?'
+)
+
+sd_question(
+  id = "income",
+  type = "mc",
+  label = "Wie beurteilen Sie Ihre aktuelle finanzielle Situation?\nMit dem was ich derzeit habe, kann ich ...",
+  option = c(
+    "... bequem leben." = "1",
+    "... zurechtkommen." = "2",
+    "... schwer zurechtkommen." = "3",
+    "... nur sehr schwer zurechtkommen." = "4"
+  )
+)
+
+sd_question(
+  id = "region",
+  type = "mc",
+  label = 'Woran haben Sie bei der Frage nach "Ihrer Region" vor allem gedacht?',
+  option = c(
+    "Nachbarschaft" = "1",
+    "Stadtteil" = "2",
+    "Wohnort" = "3",
+    "Gemeinde" = "4",
+    "Landkreis" = "5",
+    "Bundesland" = "6",
+    "Sonstiges" = "sonstiges"
+  )
+)
+
+sd_question(
+  id = "region_sonstiges",
+  type = "text",
+  label = 'An was haben Sie bei der Frage nach "Ihrer Region" gedacht?'
+)
+
+sd_next("ende")
+```
+
+:::
+
+::: {#ende .sd-page}
+
+## Vielen Dank für Ihre Teilnahme!
+Ihr Beitrag ist von großem Wert, um besser zu verstehen, welche Maßnahmen den gesellschaftlichen Zusammenhalt stärken könnten. Gemeinsam schaffen wir eine Grundlage für positive Veränderungen in unserer Gesellschaft.
+
+Nochmals herzlichen Dank für Ihre Zeit und Engagement!
+
+Sie können die Umfrage jetzt beenden.
+
+---
+
+Wenn Sie mehr über die Ergebnisse dieser Umfrage oder das dahinterstehende Projekt erfahren möchten, besuchen Sie unsere 
+
+```{r}
+sd_redirect(
+  id     = "redirect",
+  url    = "https://www.wzb.eu/de/forschung/dynamiken-sozialer-ungleichheiten/arbeit-familie-und-soziale-ungleichheit/projekte/zukunftsvisionen-junger-menschen-zu-gesellschaft-und-zusammenhalt",
+  label  = "Projekt-Webseite",
+  button = TRUE,
+  newtab = FALSE
+)
+```
+
+:::
