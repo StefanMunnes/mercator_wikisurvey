@@ -16,7 +16,7 @@ questions_short <- c(
 )
 
 items <- lapply(unname(questions_short), function(q) {
-  readxl::read_xlsx("items.xlsx", sheet = q)
+  readxl::read_xlsx("items_active.xlsx", sheet = q)
 })
 
 names(items) <- unname(questions_short)
