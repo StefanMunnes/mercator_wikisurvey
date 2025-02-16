@@ -1,6 +1,6 @@
 
 # load database connection details from .env file
-dotenv::load_dot_env(".env")
+dotenv::load_dot_env("survey/.env")
 
 # connect to database
 pool <- pool::dbPool(
@@ -24,7 +24,7 @@ pool::poolClose(pool)
 # write data to disk as backup
 write.csv(
   data, 
-  paste(
+  paste0(
     "results/data/db", "_",
     Sys.getenv("SD_TABLE"), "_",
     format(Sys.time(), "%Y%m%d_%H%M"), ".csv"
