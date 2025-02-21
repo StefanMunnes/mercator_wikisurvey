@@ -200,9 +200,11 @@ sd_next("ende")
 ## Vielen Dank für Ihre Teilnahme!
 Ihr Beitrag ist von großem Wert, um besser zu verstehen, welche Maßnahmen den gesellschaftlichen Zusammenhalt stärken könnten. Gemeinsam schaffen wir eine Grundlage für positive Veränderungen in unserer Gesellschaft.
 
+Deshalb wäre es toll, wenn Sie noch mehr Menschen motivieren könnten, unter diesem Link ihre Meinung mit uns zu teilen: [shiny2.wzb.eu/munnes/wikisurvey](https://shiny2.wzb.eu/munnes/wikisurvey)
+
 Nochmals herzlichen Dank für Ihre Zeit und Engagement!
 
-Sie können die Umfrage jetzt beenden.
+Sie können die Umfrage jetzt beenden oder bei Interesse nochmal ausfüllen.
 
 ---
 
