@@ -38,8 +38,11 @@ items_input_long <- data |>
     ) |>
   filter(!is.na(label)) |> 
   select(question, label, time_input, time_download) |>
-  # add dot to end of statements (remove possibly other punctuation) 
-  mutate(label = stringr::str_replace(label, "^(.*?)([.!?:;])?$", "\\1.")) |>
+  # add dot to end of statements (remove possibly other punctuation) and first letter uppercase
+  mutate(
+    label = stringr::str_replace(label, "^(.+?)([.!?:; ])*$", "\\1."),
+    label = gsub("^([a-zäöü])", "\\U\\1", label, perl = TRUE)
+  ) |>
   mutate(
     add_to = NA,
     label_new = NA,
@@ -115,4 +118,3 @@ items_check_new <- Filter(function(df) nrow(df) > 0, items_check_new)
 if (length(items_check_new) > 0) {
   writexl::write_xlsx(items_check_new, file_check)
 } 
-
