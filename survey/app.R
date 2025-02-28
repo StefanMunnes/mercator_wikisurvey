@@ -1,4 +1,5 @@
 library(surveydown)
+library(dplyr)
 library(shinyvalidate)
 
 
@@ -72,6 +73,22 @@ server <- function(input, output, session) {
         )
       }
     }
+
+    # create table to display for item scores (depending on chosen question)
+    output$tbl_scores <- renderTable({
+      items[[input$question]] |>
+        arrange(desc(score)) |>
+        head(10) |>
+        select(label, score) |> #, times_shown
+        mutate(score = round(score)) |>
+        mutate(rank = row_number(), .before = "label") |> 
+        setNames(c("Platz", "Maßnahme", "Score")) #, "Ratings"
+
+    }, 
+      digits = 0, spacing = "xs", align = "clc", # "clcc"
+      hover= TRUE, striped = TRUE, bordered = TRUE
+    )
+
   })
 
 

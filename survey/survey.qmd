@@ -24,6 +24,8 @@ Haben Sie eigene Vorschläge für Maßnahmen? Tragen Sie diese gerne in den ents
 
 Es gibt kein "richtig" oder "falsch" – wir möchten Ihre Meinung hören.
 
+Sehen Sie am Ende der Umfrage, welche 10 Maßnahmen bei allen Teilnehmenden am beliebtesten sind.
+
 <details>
   <summary><strong>Informationen zum Datenschutz</strong></summary>
   Verantwortlich für die Durchführung dieser Umfrage ist das <a href="https://www.wzb.eu/de">Wissenschaftszentrum Berlin für Sozialforschung (WZB)</a>. Die Datenerhebung und -verarbeitung erfolgt ausschließlich zu wissenschaftlichen Zwecken. Die Teilnahme an der Befragung ist freiwillig. Bei Nicht-Teilnahme entstehen Ihnen keinerlei Nachteile. Die erhobenen Daten sind annonym und lassen keine Rückschlüsse auf Sie als Person zu.
@@ -101,7 +103,7 @@ sd_next()
 
 ::: {#sozdem .sd-page}
 
-**Abschließend möchten wir Sie noch bitten, einige Fragen zu Ihrer Person zu beantworten.**
+**Bevor Sie die 10 beliebtesten Maßnahmen sehen, möchten wir Sie noch bitten, einige Fragen zu Ihrer Person zu beantworten.**
 
 ```{r}
 sd_question(
@@ -190,6 +192,33 @@ sd_question(
   label = 'An was haben Sie bei der Frage nach "Ihrer Region" gedacht?'
 )
 
+sd_next()
+```
+
+:::
+
+::: {#scores .sd-page}
+
+## Welche Maßnahmen sind beliebt?
+
+Hier sehen Sie die 10 am besten bewerteten Maßnahmen, basierend auf den Einschätzungen aller Teilnehmenden.
+
+Diese Ergebnisse zeigen, welche Ansätze besonders vielversprechend erscheinen – ein wertvoller Ausgangspunkt für weitere Diskussionen und konkrete Maßnahmen.
+
+```{r}
+shiny::tableOutput("tbl_scores")
+```
+
+<details>
+  <summary><strong>Informationen zum Score</strong></summary>
+  Der Score basiert auf einem statistischen Modell (Bradley-Terry), bei dem die Paarvergleiche der Maßnahmen ausgewertet werden. Jedes Mal, wenn zwei Maßnahmen gegeneinander „antreten“ (also in einer Frage gemeinsam angezeigt werden) und eine davon gewählt wird, fließt das Ergebnis in die Berechnung ein.
+
+  Um die Genauigkeit zu erhöhen, wird für jede Maßnahme abgeschätzt, wie wahrscheinlich es ist, dass sie gegen jede andere Maßnahme gewinnt. Der Score gibt dann an, wie hoch diese Gewinnwahrscheinlichkeit im Durchschnitt ist – in Prozent ausgedrückt. Eine Maßnahme mit einem Score von 70 würde also „im Schnitt“ 70 von 100 Vergleichssituationen gegen andere Maßnahmen gewinnen.
+
+  Das Ranking sortiert die Maßnahmen von der höchsten zur niedrigsten Gewinnwahrscheinlichkeit. Es zeigt damit, welche Maßnahmen insgesamt in den Pairings am besten abschneiden oder am beliebtesten sind. Dabei bedeutet ein hoher Platz im Ranking, dass diese Maßnahme in den Vergleichen besonders häufig gewählt wurde.
+</details>
+
+```{r}
 sd_next("ende")
 ```
 
