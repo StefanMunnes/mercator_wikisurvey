@@ -21,9 +21,15 @@ if (!file.exists(file_check)) {
   # 1. load checked items and prepare the once to add to active items list
   message("Load checked items and prepare for adding to active items list.")
 
+  # load checked items (if available for question)
   items_check_all <- lapply(questions, function(q) {
-    openxlsx::read.xlsx(file_check, q, detectDates = TRUE) |>
-      mutate(across(everything(), as.character))
+    tryCatch({
+      openxlsx::read.xlsx(file_check, q, detectDates = TRUE) |>
+        mutate(across(everything(), as.character))
+    }, error = function(e) {
+      message(paste0("No checked items for question: ", q))
+      data.frame()
+    })
   }) |> bind_rows()
 
   # error message if no add_to and no reason provided against add
@@ -98,9 +104,13 @@ if (!file.exists(file_check)) {
   # 2. write all checked items to backup
   items_backup_new <- lapply(questions, function(q) {
     
-    # load checked items
-    items_check <- openxlsx::read.xlsx(file_check, q, detectDates = TRUE) |>
-      mutate(across(everything(), as.character))
+    # load checked items (if available for question)
+    items_check <- tryCatch({
+      openxlsx::read.xlsx(file_check, q, detectDates = TRUE) |>
+        mutate(across(everything(), as.character))
+    }, error = function(e) {
+      data.frame()
+    })
 
     # load most recent backup file
     items_backup <- openxlsx::read.xlsx(
