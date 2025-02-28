@@ -2,12 +2,16 @@ library(dplyr)
 library(tidyr)
 library(BradleyTerry2)
 
+# 0. set questions and file path
 questions <- c("society", "region", "work")
+
+file_active <- "survey/items_active.xlsx"
 
 
 # 1.1 get local excel list of active items for each question
 items_active_ls <- lapply(questions, function(q) {
-  readxl::read_xlsx("survey/items_active.xlsx", sheet = q)
+  readxl::read_xlsx(file_active, sheet = q) |>
+    select(item, label, time_added)
 }) 
 
 names(items_active_ls) <- questions
@@ -66,6 +70,8 @@ items_winrate <- items_pairs |>
 
 items_active_stat_ls <- lapply(questions, function(q) {
 
+  message(paste0("Add statistics and calculate Score for question: ", q))
+
   items_winrate <- items_winrate |>
     filter(question == q) |>
     # new probability to be shown: normalize between 0.5 and 1 depending on times_shown
@@ -73,7 +79,7 @@ items_active_stat_ls <- lapply(questions, function(q) {
       across(c(times_shown, times_chosen), ~ ifelse(is.na(.x), 0, .x)),
       prob = 1 - (times_shown - min(times_shown)) / (max(times_shown) - min(times_shown)) * 0.5
     ) |>
-    select(item, label, prob, time_added, times_shown, winning_rate) |> 
+    select(item, label, prob, winning_rate, times_chosen, times_shown, time_added) |> 
     arrange(item)
 
   items <- items_winrate$item
@@ -119,9 +125,9 @@ items_active_stat_ls <- lapply(questions, function(q) {
   
   full_join(items_winrate, items_scores, by = "label") |>
     mutate(score = ifelse(times_shown < 3, NA, score)) |> 
-    select(item, label, winning_rate, score, times_shown, prob, time_added)
+    select(item, label, winning_rate, score, times_chosen, times_shown, prob, time_added)
 })
 
 names(items_active_stat_ls) <- questions
 
-writexl::write_xlsx(items_active_stat_ls, "survey/items_active_test.xlsx")
+writexl::write_xlsx(items_active_stat_ls, file_active)
