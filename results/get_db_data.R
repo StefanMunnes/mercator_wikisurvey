@@ -14,7 +14,7 @@ pool <- pool::dbPool(
 )
 
 # load data from database table
-data <- DBI::dbReadTable(pool, Sys.getenv("SD_TABLE")) # 
+data <- DBI::dbReadTable(pool, Sys.getenv("SD_TABLE")) 
 
 
 # close connection

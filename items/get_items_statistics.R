@@ -12,7 +12,7 @@ file_active <- "survey/items_active.xlsx"
 items_active_ls <- lapply(questions, function(q) {
   readxl::read_xlsx(file_active, sheet = q) |>
     select(item, label, time_added)
-}) 
+})
 
 names(items_active_ls) <- questions
 
@@ -36,17 +36,23 @@ items_pairs <- data |>
   ) |>
   filter(question == wiki_pairs_type) |> # keep just fitting pairs by question
   # create single variables from string of wiki pairs and bring in long format
-  separate(wiki_pairs, into = paste0("wiki_pair_", 1:10), sep = ";") |> 
-  select(!wiki_pairs_type) |> 
+  separate(wiki_pairs, into = paste0("wiki_pair_", 1:10), sep = ";") |>
+  select(!wiki_pairs_type) |>
   pivot_longer(
     cols = !question,
-    names_to = c(".value", "number"), 
+    names_to = c(".value", "number"),
     names_pattern = "(wiki|wiki_pair)_(\\d+)"
-  ) |> 
+  ) |>
   rename(chosen = wiki) |>
   filter(!is.na(chosen)) |> # remove list of pairs if no answer was given
   # split combined shown wiki pair into two items
-  separate(wiki_pair, into = c("item1", "item2"), sep = ",", remove = TRUE, convert = TRUE)
+  separate(
+    wiki_pair,
+    into = c("item1", "item2"),
+    sep = ",",
+    remove = TRUE,
+    convert = TRUE
+  )
 
 
 # 3. calculate statistics (times shown, times chosen, winrate) for each item
@@ -61,7 +67,7 @@ items_winrate <- items_pairs |>
     times_chosen = sum(item == chosen),
     winning_rate = round(times_chosen / times_shown, 4),
     .by = c("question", "item")
-  ) |> 
+  ) |>
   full_join(
     items_active,
     by = c("question", "item")
@@ -69,7 +75,6 @@ items_winrate <- items_pairs |>
 
 
 items_active_stat_ls <- lapply(questions, function(q) {
-
   message(paste0("Add statistics and calculate Score for question: ", q))
 
   items_winrate <- items_winrate |>
@@ -77,15 +82,26 @@ items_active_stat_ls <- lapply(questions, function(q) {
     # new probability to be shown: normalize between 0.5 and 1 depending on times_shown
     mutate(
       across(c(times_shown, times_chosen), ~ ifelse(is.na(.x), 0, .x)),
-      prob = 1 - (times_shown - min(times_shown)) / (max(times_shown) - min(times_shown)) * 0.5
+      prob = 1 -
+        (times_shown - min(times_shown)) /
+          (max(times_shown) - min(times_shown)) *
+          0.5
     ) |>
-    select(item, label, prob, winning_rate, times_chosen, times_shown, time_added) |> 
+    select(
+      item,
+      label,
+      prob,
+      winning_rate,
+      times_chosen,
+      times_shown,
+      time_added
+    ) |>
     arrange(item)
 
   items <- items_winrate$item
   names(items) <- items_winrate$label
 
-  items_pairs_wins <- items_pairs |> 
+  items_pairs_wins <- items_pairs |>
     filter(question == q) |>
     transmute(
       win1 = ifelse(chosen == item1, 1, 0),
@@ -116,16 +132,25 @@ items_active_stat_ls <- lapply(questions, function(q) {
         p_i_beats_j <- 1 / (1 + exp(others - b_i))
         # Mean probability across all others
         value <- mean(p_i_beats_j, na.rm = TRUE) * 100
-  
+
         round(value, 2)
       },
       USE.NAMES = FALSE
     )
   )
-  
+
   full_join(items_winrate, items_scores, by = "label") |>
-    mutate(score = ifelse(times_shown < 3, NA, score)) |> 
-    select(item, label, winning_rate, score, times_chosen, times_shown, prob, time_added)
+    mutate(score = ifelse(times_shown < 3, NA, score)) |>
+    select(
+      item,
+      label,
+      winning_rate,
+      score,
+      times_chosen,
+      times_shown,
+      prob,
+      time_added
+    )
 })
 
 names(items_active_stat_ls) <- questions

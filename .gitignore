@@ -1,6 +1,10 @@
-*
+results/data/
+results/old/
+*/backup/*
 
-!*.R
-!.gitignore
+survey/_survey/
 
-!*/
+.env
+
+*.xlsx
+*.docx
