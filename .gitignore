@@ -6,5 +6,4 @@ survey/_survey/
 
 .env
 
-*.xlsx
 *.docx
