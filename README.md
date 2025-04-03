@@ -18,7 +18,7 @@ The core concept of Wiki Surveys and methods for evaluating their results are de
 
 ## Implementation in R with surveydown
 
-![example of pairwise comparisons in surveydown](misc/img_survey.jpg "Screenshot from wiki-like pairwise comparison implemented with surveydown")
+![example of pairwise comparisons in surveydown](misc/img_wiki_survey.jpg "Screenshot from wiki-like pairwise comparison implemented with surveydown")
 
 This Wiki Survey is implemented using the R package [surveydown][surveydown], a code-based solution that employs the [R programming language](https://www.r-project.org/), the [Shiny](https://github.com/rstudio/shiny) framework for building reactive web applications, [Quarto](https://github.com/quarto-dev/quarto) for markdown formatting with code interpretation, and [Supabase](https://github.com/supabase/supabase) as a PostgreSQL database backend.
 
@@ -71,7 +71,7 @@ The script [get_items_statistics.R](items/get_items_statistics.R) performs the f
 
 These scores offer a clear ranking and help identify which ideas or suggestions resonate most (or least) with participants.
 
-![example of table with item scores](misc/img_items_scores.jpg)
+![example of table with item scores](misc/img_table_scores.jpg)
 
 
 ## Usage and Replication
