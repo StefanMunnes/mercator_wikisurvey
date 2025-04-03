@@ -25,7 +25,7 @@ pool::poolClose(pool)
 write.csv(
   data, 
   paste0(
-    "results/data/db", "_",
+    "results/data/backup/db", "_",
     Sys.getenv("SD_TABLE"), "_",
     format(Sys.time(), "%Y%m%d_%H%M"), ".csv"
   )
