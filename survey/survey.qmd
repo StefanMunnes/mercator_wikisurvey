@@ -82,7 +82,9 @@ sd_output("wiki_10", "question")
 
 ```{r}
 sd_question(
-  id = "input1", type = "text", label = NULL,
+  id = "input1",
+  type = "text",
+  label = NULL,
   option = "Ihre Idee für eine weitere Maßnahme ..."
 )
 sd_question(id = "input2", type = "text", label = NULL)
@@ -229,11 +231,11 @@ sd_next("ende")
 ## Vielen Dank für Ihre Teilnahme!
 Ihr Beitrag ist von großem Wert, um besser zu verstehen, welche Maßnahmen den gesellschaftlichen Zusammenhalt stärken könnten. Gemeinsam schaffen wir eine Grundlage für positive Veränderungen in unserer Gesellschaft.
 
-Deshalb wäre es toll, wenn Sie noch mehr Menschen motivieren könnten, unter diesem Link ihre Meinung mit uns zu teilen: [shiny2.wzb.eu/munnes/wikisurvey](https://shiny2.wzb.eu/munnes/wikisurvey)
+Deshalb wäre es toll, wenn Sie noch mehr Menschen motivieren könnten, unter diesem Link ihre Meinung mit uns zu teilen: [shiny2.wzb.eu/munnes/wikisurvey](https://shiny2.wzb.eu/afs-team/wikisurvey)
 
 Nochmals herzlichen Dank für Ihre Zeit und Engagement!
 
-Sie können die Umfrage jetzt beenden oder bei Interesse nochmal ausfüllen.
+Sie können die Umfrage jetzt beenden oder bei Interesse nochmal ausfüllen (durch neu laden der Seite).
 
 ---
 
@@ -241,9 +243,9 @@ Wenn Sie mehr über die Ergebnisse dieser Umfrage oder das dahinterstehende Proj
 
 ```{r}
 sd_redirect(
-  id     = "redirect",
-  url    = "https://www.wzb.eu/de/forschung/dynamiken-sozialer-ungleichheiten/arbeit-familie-und-soziale-ungleichheit/projekte/zukunftsvisionen-junger-menschen-zu-gesellschaft-und-zusammenhalt",
-  label  = "Projekt-Webseite",
+  id = "redirect",
+  url = "https://www.wzb.eu/de/forschung/dynamiken-sozialer-ungleichheiten/arbeit-familie-und-soziale-ungleichheit/projekte/zukunftsvisionen-junger-menschen-zu-gesellschaft-und-zusammenhalt",
+  label = "Projekt-Webseite",
   button = TRUE,
   newtab = FALSE
 )
