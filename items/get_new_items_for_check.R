@@ -16,8 +16,11 @@ questions <- c("society", "region", "work")
 
 file_check <- "items/items_check.xlsx"
 
-files_check_backup <- list.files("items/backup", "^items_check_", full.names = TRUE)
-
+files_check_backup <- list.files(
+  "items/backup",
+  "^items_check_",
+  full.names = TRUE
+)
 
 
 # 1. load and prepare respondents inputs of items from supabase database
@@ -32,11 +35,12 @@ items_input_long <- data |>
     time_download = date_time
   ) |>
   select(question, time_input, time_download, starts_with("input")) |>
-    tidyr::pivot_longer(
-      cols = starts_with("input"),
-      names_to = "input", values_to = "label"
-    ) |>
-  filter(!is.na(label)) |> 
+  tidyr::pivot_longer(
+    cols = starts_with("input"),
+    names_to = "input",
+    values_to = "label"
+  ) |>
+  filter(!is.na(label)) |>
   select(question, label, time_input, time_download) |>
   # add dot to end of statements (remove possibly other punctuation) and first letter uppercase
   mutate(
@@ -60,50 +64,58 @@ items_input <- lapply(questions, function(q) {
 names(items_input) <- questions
 
 
-
 # 2. write new inputs to check file
 # (check for new inputs for each question from backup and active check file)
 
 items_check_new <- lapply(questions, function(q) {
-
   message("Check for new inputs for: ", q)
 
   # read backup file with all implemented inputs
   message("1. Load backup file.")
   items_check_backup <- openxlsx::read.xlsx(
-    sort(files_check_backup, decreasing = TRUE)[1], q, detectDates = TRUE
+    sort(files_check_backup, decreasing = TRUE)[1],
+    q,
+    detectDates = TRUE
   )
 
   # keep just input, that were not processed before (add to active items list)
   time_recent <- max(items_check_backup$time_input)
   items_input_new <- filter(items_input[[q]], time_input > time_recent)
 
-
   # try to read active check file with not implemented inputs
-  items_check_new <- tryCatch({
+  items_check_new <- tryCatch(
+    {
+      items_check_active <- openxlsx::read.xlsx(
+        file_check,
+        q,
+        detectDates = TRUE
+      ) |>
+        mutate(across(everything(), as.character))
 
-    items_check_active <- openxlsx::read.xlsx(file_check, q, detectDates = TRUE) |>
-      mutate(across(everything(), as.character))
-    
-    # combine active check and new inputs and keep unique to write again in file
-    items_check_unique <- bind_rows(items_check_active, items_input_new) |>
-      distinct(label, time_input, .keep_all = TRUE) |>
-      arrange(time_input)
-    
-    message(
-      "2. Load active check file and add ", 
-      nrow(items_check_unique) - nrow(items_check_active),
-      " new inputs."
-    )
+      # combine active check and new inputs and keep unique to write again in file
+      items_check_unique <- bind_rows(items_check_active, items_input_new) |>
+        distinct(label, time_input, .keep_all = TRUE) |>
+        arrange(time_input)
 
-    items_check_unique
+      message(
+        "2. Load active check file and add ",
+        nrow(items_check_unique) - nrow(items_check_active),
+        " new inputs."
+      )
 
-  }, error = function(e) {
-    # if now check file could be loaded: create new check file just from new inputs
-    message("2. No active check file found, add ", nrow(items_input_new), " new inputs.")
-    
-    items_input_new
-  })
+      items_check_unique
+    },
+    error = function(e) {
+      # if now check file could be loaded: create new check file just from new inputs
+      message(
+        "2. No active check file found, add ",
+        nrow(items_input_new),
+        " new inputs."
+      )
+
+      items_input_new
+    }
+  )
 
   return(items_check_new)
 })
@@ -117,4 +129,4 @@ items_check_new <- Filter(function(df) nrow(df) > 0, items_check_new)
 
 if (length(items_check_new) > 0) {
   writexl::write_xlsx(items_check_new, file_check)
-} 
+}
