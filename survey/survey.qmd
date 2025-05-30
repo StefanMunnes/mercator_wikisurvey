@@ -22,7 +22,7 @@ Dies ist eine interaktive Umfrage. Sie sehen immer zwei zufällig ausgewählte M
 
 Haben Sie eigene Vorschläge für Maßnahmen? Tragen Sie diese gerne in den entsprechenden Feldern ein. Ihre Vorschläge können dann von anderen Befragten ebenfalls bewertet werden.
 
-Es gibt kein "richtig" oder "falsch" – wir möchten Ihre Meinung hören.
+Es gibt kein "richtig" oder "falsch" – wir möchten *Ihre Meinung* hören.
 
 Sehen Sie am Ende der Umfrage, welche 10 Maßnahmen bei allen Teilnehmenden am beliebtesten sind.
 
@@ -231,7 +231,17 @@ sd_next("ende")
 ## Vielen Dank für Ihre Teilnahme!
 Ihr Beitrag ist von großem Wert, um besser zu verstehen, welche Maßnahmen den gesellschaftlichen Zusammenhalt stärken könnten. Gemeinsam schaffen wir eine Grundlage für positive Veränderungen in unserer Gesellschaft.
 
-Deshalb wäre es toll, wenn Sie noch mehr Menschen motivieren könnten, unter diesem Link ihre Meinung mit uns zu teilen: [shiny2.wzb.eu/munnes/wikisurvey](https://shiny2.wzb.eu/afs-team/wikisurvey)
+Deshalb wäre es toll, wenn Sie noch mehr Menschen motivieren könnten, unter diesem Link ihre Meinung mit uns zu teilen: [shiny2.wzb.eu/afs-team/wikisurvey](https://shiny2.wzb.eu/afs-team/wikisurvey)
+
+Als Dankeschön haben Sie zudem die Möglichkeit, an der **Verlosung** teilzunehmen und *eins* von *zehn* Büchern <a href="https://shop.duden.de/Die-Vertrauensfrage/9783411756421" target="_blank">Die Vertrauensfrage</a> (Jutta Allmendinger, Jan Wetzel) zu gewinnen. Um an der Verlosung teilzunehmen, tragen Sie einfach Ihre E-Mail-Adresse ein:
+```{r}
+sd_question(
+  id = "email",
+  type = "text",
+  label = NULL,
+  option = "E-Mail-Adresse"
+)
+```
 
 Nochmals herzlichen Dank für Ihre Zeit und Engagement!
 
@@ -239,7 +249,7 @@ Sie können die Umfrage jetzt beenden oder bei Interesse nochmal ausfüllen (dur
 
 ---
 
-Wenn Sie mehr über die Ergebnisse dieser Umfrage oder das dahinterstehende Projekt erfahren möchten, besuchen Sie unsere 
+Wenn Sie mehr über das Forschungsprojekt erfahren möchten, besuchen Sie unsere 
 
 ```{r}
 sd_redirect(

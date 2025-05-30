@@ -24,14 +24,12 @@ names(items) <- unname(questions_short)
 
 
 server <- function(input, output, session) {
-
   # load and prepare wiki items as pairs from loaded excel file
   pairs <- lapply(items, function(q) {
-
     items_raw <- setNames(as.character(q$item), q$label)
 
     pairs <- replicate(
-      10, 
+      10,
       sample(items_raw, 2, replace = FALSE, prob = q$prob),
       simplify = FALSE
     )
@@ -45,25 +43,20 @@ server <- function(input, output, session) {
       sapply(pairs[[pairs_name]], paste0, collapse = ","), # , inside each pair
       collapse = ";" # , between multiple pairs
     )
-  
+
     sd_store_value(pairs_combined, paste0("wiki_pairs_", pairs_name))
   }
 
-  
   shiny::observe({
-
-    # prepare question depending lable for wiki headlines 
+    # prepare question depending lable for wiki headlines
     question_chosen <- names(questions_short[questions_short == input$question])
 
     sd_store_value(question_chosen, "question_lab_1")
     sd_store_value(question_chosen, "question_lab_2")
 
-
     # create all wiki questions with randomly paired statements for chosen question
     if (!is.null(input$question)) {
-
       for (pair in seq_along(pairs[[input$question]])) {
-
         sd_question(
           id = paste0("wiki_", pair),
           type = "mc_buttons",
@@ -75,25 +68,26 @@ server <- function(input, output, session) {
     }
 
     # create table to display for item scores (depending on chosen question)
-    output$tbl_scores <- renderTable({
-      items[[input$question]] |>
-        arrange(desc(score)) |>
-        head(10) |>
-        select(label, score) |> #, times_shown
-        mutate(score = round(score)) |>
-        mutate(rank = row_number(), .before = "label") |> 
-        setNames(c("Platz", "Maßnahme", "Score")) #, "Ratings"
-
-    }, 
-      digits = 0, spacing = "xs", align = "clc", # "clcc"
-      hover= TRUE, striped = TRUE, bordered = TRUE
+    output$tbl_scores <- renderTable(
+      {
+        items[[input$question]] |>
+          arrange(desc(score)) |>
+          head(10) |>
+          select(label, score) |> #, times_shown
+          mutate(score = round(score)) |>
+          mutate(rank = row_number(), .before = "label") |>
+          setNames(c("Platz", "Maßnahme", "Score")) #, "Ratings"
+      },
+      digits = 0,
+      spacing = "xs",
+      align = "clc", # "clcc"
+      hover = TRUE,
+      striped = TRUE,
+      bordered = TRUE
     )
-
   })
 
-
   sd_show_if(
-
     sd_is_answered("wiki_1") ~ "wiki_2",
     sd_is_answered("wiki_2") ~ "wiki_3",
     sd_is_answered("wiki_3") ~ "wiki_4",
@@ -120,8 +114,18 @@ server <- function(input, output, session) {
   )
 
   iv <- InputValidator$new()
-  iv$add_rule("byear", sv_regex("^(19[2-9][0-9])|(20[01][0-9])$", "Kein gültiges Geburtsjahr"))
+  iv$add_rule(
+    "byear",
+    sv_regex("^(19[2-9][0-9])|(20[01][0-9])$", "Kein gültiges Geburtsjahr")
+  )
   iv$add_rule("plz", sv_regex("[0-9]{4,5}$", "Keine gültige PLZ"))
+  iv$add_rule(
+    "email",
+    sv_regex(
+      "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$",
+      "Keine gültige E-Mail"
+    )
+  )
   iv$enable()
 
   sd_server(
