@@ -249,6 +249,20 @@ Sie können die Umfrage jetzt beenden oder bei Interesse nochmal ausfüllen (dur
 
 ---
 
+Detailliertere Einblicke, mit einem Überblick über die Charakteristika der bisherigen Teilnehmerinnen und Teilnehmer, sowie zu allen bisherigen Maßnahmen und wie sie bewertet wurden, finden sie auf unserem
+
+```{r}
+sd_redirect(
+  id = "redirect_results",
+  url = "https://shiny2.wzb.eu/afs-team/wikisurvey_results/",
+  label = "Ergebnis-Dashboard",
+  button = TRUE,
+  newtab = FALSE
+)
+```
+
+--- 
+
 Wenn Sie mehr über das Forschungsprojekt erfahren möchten, besuchen Sie unsere 
 
 ```{r}
