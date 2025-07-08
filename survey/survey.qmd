@@ -1,5 +1,6 @@
 ---
 format: html
+theme: cosmo
 echo: false
 warning: false
 ---
