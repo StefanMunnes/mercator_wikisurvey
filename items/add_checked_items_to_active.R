@@ -1,6 +1,7 @@
 ### add ckecked user input statements to active items excel list
 
 library(dplyr)
+library(tidyllm)
 
 # 0. set date time and valid questions
 date_time <- format(Sys.time(), "%Y%m%d_%H%M")
@@ -9,12 +10,21 @@ questions <- c("society", "region", "work")
 
 file_check <- "items/items_check.xlsx"
 file_active <- "survey/items_active.xlsx"
+file_embeddings <- "items/items_active_embeddings.RDS"
 files_check_backup <- list.files(
   "items/backup",
   "^items_check_",
   full.names = TRUE
 )
 
+items_active_embeddings <- readRDS(file_embeddings)
+saveRDS(items_active_embeddings, file_embeddings)
+
+options(tidyllm_embed_default = openai(.model = "text-embedding-3-small"))
+
+cos_sim <- function(a, b) {
+  sum(a * b) / (sqrt(sum(a^2)) * sqrt(sum(b^2)))
+}
 
 # check if check file exists, then process inputs and create backup
 if (!file.exists(file_check)) {
@@ -40,6 +50,11 @@ if (!file.exists(file_check)) {
 
   # error message if no add_to and no reason provided against add
   if (nrow(filter(items_check_all, is.na(add_to) & is.na(reason))) > 0) {
+    print(
+      items_check_all |>
+        filter(is.na(add_to) & is.na(reason)) |>
+        select(label)
+    )
     stop("Provide a reason, if new items should not be added to any question.")
   }
 
@@ -61,6 +76,7 @@ if (!file.exists(file_check)) {
 
   # error message if include not match question names
   if (!all(unique(items_check_keep$add_to) %in% questions)) {
+    print(items_check_keep |> filter(add_to %in% questions))
     stop(
       "Invalid entry in add_to column (needs to be one of: ",
       paste0(questions, collapse = ", "),
@@ -153,3 +169,30 @@ if (!file.exists(file_check)) {
 
   file.remove(file_check)
 }
+
+
+# get embeddings for new items and add to existing ones
+if (nchar(Sys.getenv("OPENAI_API_KEY")) == 0) {
+  key <- readline("OPENAI_API_KEY (Enter to stop): ")
+
+  if (nchar(key) > 0) {
+    Sys.setenv("OPENAI_API_KEY" = key)
+  } else {
+    stop(
+      "OPENAI_API_KEY is not set. Plase, get embeddings for new items manually."
+    )
+  }
+}
+
+message("Get embeddings for ", nrow(items_check_keep), " new items.")
+
+items_check_keep_embeddings <- embed(items_check_keep$label)
+
+items_check_keep_embeddings$question <- items_check_keep$add_to
+
+items_active_all_embeddings <- bind_rows(
+  items_active_embeddings,
+  items_check_keep_embeddings
+)
+
+saveRDS(items_active_all_embeddings, file_embeddings)
