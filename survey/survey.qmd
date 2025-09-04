@@ -200,6 +200,28 @@ sd_next()
 
 :::
 
+
+::: {#berlintrip .sd-page}
+
+## Verlosung eines Kurztrips zur Abschlussveranstaltung 
+Möchten Sie mehr aus Ihren Ideen machen? Wir auch! Gewinnen Sie einen von 10 **Kurztrips nach Berlin** zu unserer Abschlussveranstaltung im Herbst 2026, wo wir die Ergebnisse dieser Befragung u.a. mit Politiker:innen diskutieren. Kosten für Bahnfahrt und Übernachtung übernehmen wir. Ob Sie gewonnen haben, erfahren Sie bis spätestens Mitte Juli 2026.
+
+Wenn Sie an der Verlosung für einen Kurztrip teilnehmen möchten, tragen Sie einfach Ihre E-Mail-Adresse ein:
+
+```{r}
+sd_question(
+  id = "email_teenager",
+  type = "text",
+  label = NULL,
+  option = "E-Mail-Adresse"
+)
+
+sd_next()
+```
+
+:::
+
+
 ::: {#scores .sd-page}
 
 ## Welche Maßnahmen sind beliebt?
