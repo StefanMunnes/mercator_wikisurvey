@@ -71,8 +71,8 @@ items_winrate <- items_pairs |>
   full_join(
     items_active,
     by = c("question", "item")
-  )
-
+  ) |>
+  filter(!is.na(item))
 
 items_active_stat_ls <- lapply(questions, function(q) {
   message(paste0("Add statistics and calculate Score for question: ", q))
@@ -98,7 +98,7 @@ items_active_stat_ls <- lapply(questions, function(q) {
     ) |>
     arrange(item)
 
-  items <- items_winrate$item
+  items <- na.omit(items_winrate$item)
   names(items) <- items_winrate$label
 
   items_pairs_wins <- items_pairs |>
